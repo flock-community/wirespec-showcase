@@ -1,0 +1,103 @@
+services:
+
+  audit-service:
+    image: maven:3.9-eclipse-temurin-21
+    command: ./mvnw spring-boot:run -Dspring-boot.run.profiles=local -pl audit-service
+    environment:
+      DB_HOST: postgresql
+      DB_PORT: 5432
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgresql:
+        condition: service_healthy
+    volumes:
+      - .:/usr/src/mymaven:rw
+      - $HOME/.m2:/root/.m2
+    working_dir: /usr/src/mymaven
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "-u", "admin:admin", "http://localhost:8080/internal/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      start_period: 15s
+      start_interval: 2s
+      retries: 3
+
+
+  frontend:
+    image: wirespec-showcase/frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    command: npm start
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    environment:
+      VITE_SERVER_BACKEND: backend
+    volumes:
+      - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules
+    healthcheck:
+      test: [ "CMD", "wget", "-q", "--spider", "http://frontend:3000"]
+      interval: 30s
+      timeout: 10s
+      start_period: 10s
+      start_interval: 1s
+      retries: 3
+
+
+
+  kafka:
+    image: confluentinc/cp-kafka:7.4.1
+    hostname: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "bash", "-c", "kafka-topics --bootstrap-server localhost:9092 --list || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.1
+    hostname: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    healthcheck:
+      test: [ "CMD", "zookeeper-shell localhost:2181 ls / || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  postgresql:
+    image: postgres:16.5-alpine
+    ports:
+      - "54321:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+    command: postgres -c max_connections=20
+    volumes:
+      - ./docker/postgres:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-d", "teambalance" ]
+      interval: 30s
+      start_period: 10s
+      start_interval: 1s
+      timeout: 5s
+      retries: 3
+
