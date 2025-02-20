@@ -1,0 +1,18 @@
+server:
+  port: 8082
+
+spring:
+  datasource:
+    username: audit
+    password: audit
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/audit
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+
+spring.kafka:
+  bootstrap-servers: http://${KAFKA_HOST:localhost}:${KAFKA_PORT:9092}
+#  producer:
+#    transaction-id-prefix: audit-service-tx-id-
+  properties.schema.registry.url: http://${SCHEMA_REGISTRY_HOST:localhost}:${SCHEMA_REGISTRY_PORT:8081}

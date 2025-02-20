@@ -1,0 +1,52 @@
+{
+  "type": "record",
+  "name": "AuditEventRecord",
+  "namespace": "community.flock.wirespec.showcase",
+  "fields": [
+    {
+      "name": "timestamp",
+      "type": {
+        "type": "long",
+        "logicalType": "timestamp-millis"
+      },
+      "doc": "Timestamp the the event occurred"
+    },
+    {
+      "name": "eventType",
+      "type": {
+        "type": "enum",
+        "name": "AuditEventType",
+        "symbols": [
+          "LOGIN_SUCCESS",
+          "LOGIN_FAIL",
+          "LOGOUT_SUCCESS",
+          "LOGOUT_FAIL",
+          "LIST_PAYMENTS",
+          "GET_PAYMENT_BY_ID",
+          "CREATE_PAYMENT",
+          "PAYMENT_INITIATED",
+          "PAYMENT_COMPLETED"
+        ]
+      },
+      "doc": "The type of event associated with the audit"
+    },
+    {
+      "name": "details",
+      "type": "string",
+      "doc": "A message describing the audit event"
+    },
+    {
+      "name": "externalIpAddress",
+      "type": "string",
+      "doc": "The external IP address associated with the audit event"
+    },
+    {
+      "name": "username",
+      "type": [
+        "null",
+        "string"
+      ],
+      "doc": "The username of the user associated with the event"
+    }
+  ]
+}

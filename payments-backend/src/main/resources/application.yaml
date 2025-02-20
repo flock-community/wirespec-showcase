@@ -1,5 +1,0 @@
-server:
-  port: 8081
-
-audit-service:
-  base-url: 8082

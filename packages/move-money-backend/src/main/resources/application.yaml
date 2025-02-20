@@ -1,0 +1,22 @@
+server:
+  port: 8080
+
+
+payments-service:
+  base-url: http://localhost:8081
+
+audit-service:
+  base-url: http://localhost:8082
+
+
+spring.kafka:
+  bootstrap-servers: http://${KAFKA_HOST:localhost}:${KAFKA_PORT:9092}
+
+  #  producer:
+  #    transaction-id-prefix: audit-service-tx-id-
+  properties.schema.registry.url: http://${SCHEMA_REGISTRY_HOST:localhost}:${SCHEMA_REGISTRY_PORT:8091}
+  producer:
+    key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    bootstrap-servers: ${spring.kafka.bootstrap-servers}
+
+

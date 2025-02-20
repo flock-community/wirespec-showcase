@@ -1,0 +1,312 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Payments api",
+    "version": "1.0"
+  },
+  "paths": {
+    "/api/payments": {
+      "get": {
+        "operationId": "GetPayments",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "name": "accountNumber",
+            "in": "query",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "name": "limit",
+            "in": "query",
+            "required": true
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "name": "offset",
+            "in": "query",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GetPayments 200 response",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "nullable": false,
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Payment"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "GetPayments 400 response",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentsApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "GetPayments 500 response",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentsApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "PostPayment",
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "PostPayment 201 response",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Payment"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "PostPayment 400 response",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentsApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "PostPayment 500 response",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentsApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/payments/{id}": {
+      "get": {
+        "operationId": "GetPaymentById",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "GetPaymentById 200 response",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Payment"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "GetPaymentById 400 response",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentsApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "GetPaymentById 404 response",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentsApiError"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "GetPaymentById 500 response",
+            "headers": {},
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentsApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "schema": {
+            "type": "string"
+          },
+          "name": "id",
+          "in": "path"
+        }
+      ]
+    }
+  },
+  "components": {
+    "schemas": {
+      "PaymentsApiError": {
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "detail": {
+            "type": "string"
+          },
+          "instance": {
+            "type": "string"
+          }
+        },
+        "description": "Following the RFC-7807 standard for problem details,  https://www.rfc-editor.org/rfc/rfc7807",
+        "required": [
+          "type",
+          "title",
+          "status",
+          "detail",
+          "instance"
+        ]
+      },
+      "Currency": {
+        "type": "string",
+        "pattern": "/^EUR|USD$/"
+      },
+      "Payment": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "transactionCreatedTimestamp": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "transactionCompletedTimestamp": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "senderAccountNumber": {
+            "type": "string"
+          },
+          "senderAccountName": {
+            "type": "string"
+          },
+          "recipientAccountNumber": {
+            "type": "string"
+          },
+          "recipientAccountName": {
+            "type": "string"
+          },
+          "amount": {
+            "$ref": "#/components/schemas/MonetaryValue"
+          },
+          "currency": {
+            "$ref": "#/components/schemas/Currency"
+          }
+        },
+        "required": [
+          "id",
+          "transactionCreatedTimestamp",
+          "senderAccountNumber",
+          "senderAccountName",
+          "recipientAccountNumber",
+          "recipientAccountName",
+          "amount",
+          "currency"
+        ]
+      },
+      "MonetaryValue": {
+        "type": "string",
+        "pattern": "/^\\d+(\\.\\d{2})?$/"
+      },
+      "PaymentInput": {
+        "properties": {
+          "senderAccountNumber": {
+            "type": "string"
+          },
+          "senderAccountName": {
+            "type": "string"
+          },
+          "recipientAccountNumber": {
+            "type": "string"
+          },
+          "recipientAccountName": {
+            "type": "string"
+          },
+          "amount": {
+            "$ref": "#/components/schemas/MonetaryValue"
+          },
+          "currency": {
+            "$ref": "#/components/schemas/Currency"
+          }
+        },
+        "required": [
+          "senderAccountNumber",
+          "senderAccountName",
+          "recipientAccountNumber",
+          "recipientAccountName",
+          "amount",
+          "currency"
+        ]
+      }
+    }
+  }
+}
