@@ -92,29 +92,6 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>com.github.ekryd.sortpom</groupId>
-        <artifactId>sortpom-maven-plugin</artifactId>
-        <version>3.4.1</version>
-        <configuration>
-          <createBackupFile>false</createBackupFile>
-          <predefinedSortOrder>custom_1</predefinedSortOrder>
-          <lineSeparator>\n</lineSeparator>
-          <sortDependencies>scope,groupId,artifactId</sortDependencies>
-          <sortPlugins>scope,groupId,artifactId</sortPlugins>
-          <sortModules>true</sortModules>
-          <sortProperties>true</sortProperties>
-          <verifyFail>stop</verifyFail>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>verify</goal>
-            </goals>
-            <phase>verify</phase>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>org.jetbrains.kotlin</groupId>
         <artifactId>kotlin-maven-plugin</artifactId>
         <configuration>

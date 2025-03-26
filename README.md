@@ -491,7 +491,7 @@ Similarly, OpenAPI specifications can be converted to Wirespec:
         <languages>
             <language>Wirespec</language>
         </languages>
-        <format>OpenApiV3</format>
+        <format>OpenAPIV3</format>
     </configuration>
 </execution>
 ```
@@ -501,7 +501,7 @@ Key components:
 - Takes an OpenAPI specification file (`.json`) as input
 - Generates Wirespec files in the specified output directory
 - Sets the target language as "Wirespec"
-- Uses the "OpenApiV3" format for conversion
+- Uses the "OpenAPIV3" format for conversion
 
 > ℹ️ Besides converting from OpenApi v2 or v3 to Wirespec, it is also possible to generate Kotlin code directly from an
 > openapi spec.

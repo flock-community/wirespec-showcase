@@ -98,7 +98,7 @@
               <goal>custom</goal>
             </goals>
             <configuration>
-              <input>classpath:wirespec/audit_001.ws</input>
+              <input>classpath:wirespec/Audit_001.ws</input>
               <output>${project.build.directory}/generated-sources</output>
               <emitterClass>community.flock.wirespec.integration.avro.kotlin.emit.AvroKotlinEmitter</emitterClass>
               <extension>kt</extension>
